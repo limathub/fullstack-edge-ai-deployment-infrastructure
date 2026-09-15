@@ -1,0 +1,11 @@
+# Internal, unredacted working notes — never commit.
+internal/
+CLAUDE.md
+update.md
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
