@@ -63,6 +63,35 @@
 셈이 됨. 대신 **워크포워드**로 감. `[학습 | 검증 | 테스트]` 창을 시간축에서 한 칸씩 밀면서, 각
 구간마다 검증에서 최적 모델을 고르고 그 다음 구간을 테스트로 씀.
 
+```mermaid
+%%{init: {'themeVariables': {'fontSize': '14px'}}}%%
+gantt
+    title 워크포워드 분할 — 창을 앞으로 밀며 반복 (기간은 예시)
+    dateFormat YYYY-MM-DD
+    axisFormat %Y
+    tickInterval 1year
+    todayMarker off
+
+    section 1차
+    학습    :done,   a1, 2018-01-01, 730d
+    검증    :active, a2, after a1, 182d
+    테스트  :crit,   a3, after a2, 182d
+
+    section 2차
+    학습    :done,   b1, 2018-01-01, 1095d
+    검증    :active, b2, after b1, 182d
+    테스트  :crit,   b3, after b2, 182d
+
+    section 3차
+    학습    :done,   c1, 2018-01-01, 1460d
+    검증    :active, c2, after c1, 182d
+    테스트  :crit,   c3, after c2, 182d
+```
+
+지켜야 하는 규칙은 하나. **어느 구간에서도 검증과 테스트가 학습보다 앞서지 않는 것.** 무작위
+분할이 깨는 게 정확히 이 규칙이고, 그렇게 되면 성능이 좋아 보이는 이유가 모델이 아니라 미래를
+본 것이 됨.
+
 - **학습.** `f(X_train) ≈ y_train` 인 `f`를 찾음. `X`는 피처, `y`는 미래 수익률. XGBoost는 트리를
   순차적으로 만들면서 다음 트리가 지금까지 쌓인 오차를 보정하는 구조. 손잡이는 트리 개수, 트리
   깊이, 손실 함수 등.

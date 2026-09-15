@@ -73,6 +73,35 @@ and then predicting the past. The design is **walk-forward** instead: slide a
 `[train | validate | test]` window forward along the time axis, pick the best model on each
 validation segment, and test it on the segment that follows.
 
+```mermaid
+%%{init: {'themeVariables': {'fontSize': '14px'}}}%%
+gantt
+    title Walk-forward split — the window slides forward (periods illustrative)
+    dateFormat YYYY-MM-DD
+    axisFormat %Y
+    tickInterval 1year
+    todayMarker off
+
+    section Fold 1
+    Train     :done,   a1, 2018-01-01, 730d
+    Validate  :active, a2, after a1, 182d
+    Test      :crit,   a3, after a2, 182d
+
+    section Fold 2
+    Train     :done,   b1, 2018-01-01, 1095d
+    Validate  :active, b2, after b1, 182d
+    Test      :crit,   b3, after b2, 182d
+
+    section Fold 3
+    Train     :done,   c1, 2018-01-01, 1460d
+    Validate  :active, c2, after c1, 182d
+    Test      :crit,   c3, after c2, 182d
+```
+
+One rule has to hold: **in no fold does validation or test sit earlier than training.** That is
+exactly the rule a random split breaks, and once it is broken, what looks like performance is the
+model having seen the future.
+
 - **Training.** Find `f` with `f(X_train) ≈ y_train`, where `X` is the features and `y` is the
   future return. XGBoost builds trees in sequence, each one correcting the error accumulated so
   far. The knobs are the number of trees, the maximum depth of each, the loss function.
